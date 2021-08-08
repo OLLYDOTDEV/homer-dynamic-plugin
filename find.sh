@@ -23,7 +23,26 @@
 
 echo -e "\n"
 
-ssh $SSH_Username"@"$SSH_Host "-p" $SSH_Port "-i" $SSH_AuthKey
+
+
+
+
+
+
+status=$(ssh -o BatchMode=yes -o ConnectTimeout=5 $SSH_Username"@"$SSH_Host "-p" $SSH_Port "-i" $SSH_AuthKey echo ok 2>&1)
+
+if [[ $status == ok ]] ; then
+  echo "Auth Ok, Connected to Host"
+
+ssh $SSH_Username"@"$SSH_Host "-p" $SSH_Port "-i" $SSH_AuthKey "hostname"
+
+elif [[ $status == "Permission denied"* ]] ; then
+  echo "No Auth Failed to Connect to Host, Exiting "
+else
+  echo "Encountered Unknown Error"
+fi
+
+
 #https://www.cyberciti.biz/faq/linux-unix-osx-bsd-ssh-run-command-on-remote-machine-server/
 
 
