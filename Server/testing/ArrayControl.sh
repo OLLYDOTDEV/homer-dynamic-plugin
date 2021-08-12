@@ -7,11 +7,11 @@ Ports=("8080" "80" "90")
 
 Hostname=("test1" "test2" "test3")
 
+database_file="temp.txt" #file that is being used to store all data 
 
 
 
-
-Array_Write () {
+Array_Write () {  # used to write array to file 
 
 
 # check length of arrays arrays are the same
@@ -21,20 +21,48 @@ do
 
 #echo $element
 
-echo ${Ip_Address[$element]} ${Ports[$element]} ${Hostname[$element]} >>  temp.txt
+echo ${Ip_Address[$element]} ${Ports[$element]} ${Hostname[$element]} >>  $database_file
 done
 
 }
 
-Array_Read () {
+Array_Read () { # used to read array from file
 
-mapfile dataarray < temp.txt 
+mapfile dataarray < $database_file
 echo ${dataarray[@]}
 
 
 }
 
-Array_Read
+Array_Contains () { 
+# from https://stackoverflow.com/questions/14366390/check-if-an-element-is-present-in-a-bash-array 
+   local array="$1[@]"
+    local seeking=$2
+    local in=1
+ for element in "${!array}"; do
+        if [[ $element == "$seeking" ]]; then
+            in=0
+	break 
+	fi
+
+	break
+done
+return $in # returned valued of 0 = true
+}
+
+somevar="192.168.1.5"
+
+list=("192.168.1.1" "192.168.1.2" "192.168.1.3")
+Array_Contains list "$somevar"  && match=true || match=false
+
+if $match
+then 
+	echo "Match Found"
+else
+ echo "No Match"
+fi
+
+#Array_Read
 #Array_Write
 
 
