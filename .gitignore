@@ -1,4 +1,4 @@
 settings.conf
 *.swp
 *.save
-keyfolder/*
+*/keyfolder/*
